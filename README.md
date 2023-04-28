@@ -9,22 +9,20 @@ chmod +x ~/fastp-single.sh
 ./fastp-single.sh 150 /tmp/gen711_project_data/FMT_3/fmt-tutorial-demux-2 trimmed_fastqs
 ./fastp-single.sh 150 /tmp/gen711_project_data/FMT_3/fmt-tutorial-demux-1 trimmed_fastqs
 
-qiime tools import \
-   --type "SampleData[PairedEndSequencesWithQuality]"  \
-   --input-format CasavaOneEightSingleLanePerSampleDirFmt \
-   --input-path trimmed_fastqs \
-   --output-path trimmed_fastqs/chimme_files\
+4/28
 
-qiime cutadapt trim-paired \
-    --i-demultiplexed-sequences <path to the file from step 2> \
-    --p-cores 4 \
-    --p-front-f <the forward primer sequence> \
-    --p-front-r <the reverse primer sequence> \
-    --p-discard-untrimmed \
-    --p-match-adapter-wildcards \
-    --verbose \
-    --o-trimmed-sequences <path to an output directory>/<name for the output files>.qza
+qiime tools import --type "SampleData[SequencesWithQuality]" --input-format CasavaOneEightSingleLanePerSampleDirFmt --input-path trimmed_fastqs --output-path combined_fastqs
 
-qiime demux summarize \
---i-data <path to the file from step above> \
---o-visualization  <path to an output directory>/<a name for the output files>.qzv 
+qiime cutadapt trim-single --i-demultiplexed-sequences combined_fastqs.qza --p-front TACGTATGGTGCA --p-discard-untrimmed --p-match-adapter-wildcards --verbose --o-trimmed-sequences combined_fastqs_with_primers 
+
+--i-data combined_fastqs_with_primers.qza --o-visualization third_folder
+
+qiime dada2 denoise-single --i-demultiplexed-seqs combined_fastqs_with_primers.qza --p-trunc-len 100 --p-trim-left 13 --p-n-threads 4 --o-denoising-stats denoising-stats.qza --o-table feature_table.qza --o-representative-sequences rep-seqs.qza
+
+qiime metadata tabulate --m-input-file denoising-stats.qza --o-visualization denoising-stats.qzv
+
+qiime feature-table tabulate-seqs --i-data rep-seqs.qza --o-visualization rep-seqs.qzv
+
+no merge step needed because our files are already combined 
+
+next step: qiime feature classifier 
