@@ -33,6 +33,5 @@ qiime feature-table merge-seqs --i-data /home/users/ged1022/rep-seqs1.qza --i-da
 
 qiime feature-classifier classify-sklearn --i-classifier /tmp/gen711_project_data/reference_databases/classifier.qza --i-reads /home/users/ged1022/merged.rep-seqs.qza --o-classification /home/users/ged1022/FMT-taxonomy.qza
 
-qiime taxa barplot --i-table /home/users/ged1022/feature_table.qza --i-taxonomy /home/users/ged1022/FMT-taxonomy.qza --o-visualization /home/users/ged1022/barplot-1.qzv
-
-qiime taxa barplot --i-table <output path>/feature_table-2.qza --i-taxonomy <output path>/FMT-taxonomy.qza --o-visualization <output path>/barplot-2.qzv
+qiime taxa barplot --i-table /home/users/ged1022/feature_table1.qza --m-metadata-file sample-metadata.tsv --i-taxonomy /home/users/ged1022/FMT-taxonomy.qza --o-visualization /home/users/ged1022/barplot-1.qzv
+qiime taxa barplot --i-table /home/users/ged1022/feature_table2.qza --m-metadata-file sample-metadata.tsv --i-taxonomy /home/users/ged1022/FMT-taxonomy.qza --o-visualization /home/users/ged1022/barplot-2.qzv
